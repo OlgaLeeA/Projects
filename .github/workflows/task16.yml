@@ -1,4 +1,4 @@
-name: Deploy Docker to Digital Ocean 
+name: Deploy to Digital Ocean
 
 on:
   push:
@@ -10,27 +10,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
+     - name: Set up QEMU
+       uses: docker/setup-qemu-action@v2
+
+     - name: Set up Docker Buildx
+       uses: docker/setup-buildx-action@v2
+
+     - name: Login to Docker Hub
+       uses: docker/login-action@v2
+       with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWD }}
 
-      - name: Publish to Registry
-        uses: docker/build-push-action@v2
-        with:
-          context: .
+     - name: Build and push
+       uses: docker/build-push-action@v4
+       with:
           push: true
-          tags: deatend/web-ui:latest
+          tags: deatend/ansible:img
+     - name: Checkout code
+       uses: actions/checkout@v2
 
-      - name: Deploy APIService
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          playbook: playbook.yml
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          inventory: |
-            [all]
-            ${{ secrets.REMOTE_HOST }} ansible_ssh_port=${{ secrets.DROPLET_PORT }} ansible_ssh_user=${{ secrets.REMOTE_USER }} ansible_become_password=${{ secrets.SSH_BECOME_PASSWD }}
+     - name: Connect to droplet
+       uses: appleboy/ssh-action@master
+       with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.DROPLET_PORT }}
+
+     - name: Run Ansible playbook
+       run: |
+         ansible-playbook -i ${{ secrets.REMOTE_HOST }}, playbook.yml
