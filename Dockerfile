@@ -1,10 +1,10 @@
 FROM golang:1.18.1
-
-RUN go mod init github.com/deatend/Projects
-
+WORKDIR /app
 COPY . .
+COPY go.mod go.sum .
 RUN go mod download
-RUN go build -o task16 .
+COPY task14.go .
+RUN CGO_ENABLED=0 GOOS=linux go build -o task16 .
 
 EXPOSE 8080
 
