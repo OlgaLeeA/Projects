@@ -1,5 +1,5 @@
 - name: Start hi.service
-  hosts: 178.128.83.86
+  hosts: remote_host
   become: true
   tasks:
     - name: Start systemd service
