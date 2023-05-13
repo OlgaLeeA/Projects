@@ -27,18 +27,4 @@ jobs:
        uses: docker/build-push-action@v4
        with:
           push: true
-          tags: deatend/ansible:img
-     - name: Checkout code
-       uses: actions/checkout@v2
-
-     - name: Connect to droplet
-       uses: appleboy/ssh-action@master
-       with:
-        host: ${{ secrets.REMOTE_HOST }}
-        username: ${{ secrets.REMOTE_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.DROPLET_PORT }}
-
-     - name: Run Ansible playbook
-       run: |
-         ansible-playbook -i ${{ secrets.REMOTE_HOST }}, playbook.yml
+          tags: deatend/ansible:task10
