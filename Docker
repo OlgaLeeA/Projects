@@ -28,9 +28,9 @@ RUN mkdir -p /ansible
 WORKDIR /ansible
 
 # Copy your Ansible playbook and inventory files
-COPY task8.yml /ansible/task10.yml
+COPY task8.yml /ansible/task8.yml
 COPY inventory.ini /ansible/inventory.ini
 
 # Run the Ansible playbook
-CMD ["ansible-playbook", "-i", "inventory.ini", "task10.yml"]
+CMD ["ansible-playbook", "-i", "inventory.ini", "task8.yml"]
 
