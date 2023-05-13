@@ -1,6 +1,6 @@
 ---
 - name: Deploy and run Docker container
-  hosts: all
+  hosts: remote_host
   become: true
   gather_facts: no
 
