@@ -32,5 +32,5 @@ COPY task8.yml /ansible/task8.yml
 COPY inventory.ini /ansible/inventory.ini
 COPY ansible.cfg /ansible/ansible.cfg
 # Run the Ansible playbook
-CMD ["ansible", "version"]
+CMD ["ansible-playbook", "/ansible/task8.yml", "-i", "/ansible/inventory.ini"]
 
