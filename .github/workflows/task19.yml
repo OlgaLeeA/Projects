@@ -26,7 +26,9 @@ jobs:
         terraform init
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      run: |
+        cd ./task19
+        terraform apply -auto-approve
 
     - name: Configure instance with Ansible
       run: |
