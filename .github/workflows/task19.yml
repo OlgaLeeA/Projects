@@ -38,6 +38,6 @@ jobs:
         sudo pip3 install boto boto3
 
         # run ansible playbook
-        ansible-playbook -i ./task19/aws_ec2.yaml ./task19/playbook.yaml
+        ansible-playbook -i ./task19/aws_ec2.yaml ./task19/playbook.yml
 
      
