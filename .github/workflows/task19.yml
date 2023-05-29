@@ -40,12 +40,15 @@ jobs:
       run: |
         cd ./task19
         INSTANCE_PUBLIC_IP=$(terraform output -raw instance_public_ip)
+        echo "Obtained IP: ${INSTANCE_PUBLIC_IP}"
         echo "INSTANCE_PUBLIC_IP=${INSTANCE_PUBLIC_IP}" >> $GITHUB_ENV
+        echo "Updated environment variables:"
+        cat $GITHUB_ENV
 
     - name: Create Ansible inventory file
       run: |
         echo "[ec2]" > inventory.ini
-        echo "${INSTANCE_PUBLIC_IP}" >> inventory.ini
+        echo "${INSTANCE_PUBLIC_IP} ansible_user=ubuntu" >> inventory.ini
 
     - name: Run Ansible Playbook
       run: ansible-playbook -i inventory.ini ./task19/playbook.yml 
