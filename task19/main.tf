@@ -4,6 +4,7 @@ provider "aws" {
 
 resource "aws_instance" "example" {
   ami           = "ami-0997b4797ae01c920"
+  key_name      = "new-key.pem"
   instance_type = "t2.micro"
   
   tags = {
