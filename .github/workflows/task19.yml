@@ -40,7 +40,7 @@ jobs:
       run: |
         cd ./task19
         INSTANCE_PUBLIC_IP=$(terraform output -raw instance_public_ip)
-        echo "INSTANCE_PUBLIC_IP=${INSTANCE_PUBLIC_IP}" >> $GITHUB_STATE
+        echo "INSTANCE_PUBLIC_IP=${INSTANCE_PUBLIC_IP}" >> $GITHUB_ENV
 
     - name: Create Ansible inventory file
       run: |
@@ -48,7 +48,8 @@ jobs:
         echo "${{ env.INSTANCE_PUBLIC_IP }} ansible_user=ubuntu" >> inventory.ini
 
     - name: Set output
-      run: echo "INSTANCE_PUBLIC_IP=${{ env.INSTANCE_PUBLIC_IP }}" >> $GITHUB_OUTPUT
+      run: echo "INSTANCE_PUBLIC_IP=${{ env.INSTANCE_PUBLIC_IP }}"
+
    
     - name: Setup SSH key
       run: |
