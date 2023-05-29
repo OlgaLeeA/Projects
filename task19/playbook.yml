@@ -1,6 +1,6 @@
 ---
 - name: Install Docker on Ubuntu
-  hosts: aws_ec2  # It's referring to the plugin, not to a particular host.
+  hosts: aws_ec2 [ec2]  # It's referring to the plugin, not to a particular host.
   become: yes
   gather_facts: yes
 
