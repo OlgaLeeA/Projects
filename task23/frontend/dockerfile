@@ -1,0 +1,13 @@
+# Use an official nginx image as a base
+FROM nginx:latest
+
+# Remove the default nginx index page
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy your index.html (and any other web assets you have) to the nginx web directory
+COPY index.html /usr/share/nginx/html
+
+# Expose port 80 for the web server
+EXPOSE 80
+
+# No need for CMD instruction because the base nginx image takes care of that
