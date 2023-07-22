@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-api
+  name: {{ .Release.Name }}-postgres-db
   labels:
-    app: {{ .Release.Name }}-api
+    app: {{ .Release.Name }}-postgres-db
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-api
+      app: {{ .Release.Name }}-postgres-db
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-api
+        app: {{ .Release.Name }}-postgres-db
     spec:
       containers:
-      - name: {{ .Release.Name }}-my-api
-        image: {{ .Values.image.backend }}
+      - name: {{ .Release.Name }}-postgres-db
+        image: {{ .Values.image.db }}
         resources:
           requests:
             memory: {{ .Values.resources.request.memory }}
@@ -25,11 +25,6 @@ spec:
             memory: {{ .Values.resources.limit.memory }}
             cpu: {{ .Values.resources.limit.cpu }}
         env:
-        - name: POSTGRES_HOST
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.env.secretName }}
-              key: POSTGRES_HOST
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -45,30 +40,24 @@ spec:
             secretKeyRef:
               name: {{ .Values.env.secretName }}
               key: POSTGRES_DB
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.env.secretName }}
-              key: AWS_ACCESS_KEY_ID
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.env.secretName }}
-              key: AWS_SECRET_ACCESS_KEY
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
         ports:
-        - containerPort: {{ .Values.service.backend.port }}
+        - containerPort: {{ .Values.service.db.port }}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: {{ .Values.persistence.pvName }}
+      volumes:
+      - name: {{ .Values.persistence.pvName }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.pvcName }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.service.backend.name }}
+  name: {{ .Values.service.db.name }}
 spec:
   selector:
-    app: {{ .Release.Name }}-api
+    app: {{ .Release.Name }}-postgres-db
   ports:
   - protocol: TCP
-    port: {{ .Values.service.backend.port }}
-    targetPort: {{ .Values.service.backend.port }}
-    nodePort: {{ .Values.nodePort.backend }}
-  type: {{ .Values.service.backend.type }}
+    port: {{ .Values.service.db.port }}
+    targetPort: {{ .Values.service.db.port }}
