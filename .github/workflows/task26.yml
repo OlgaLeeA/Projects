@@ -12,9 +12,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     
-    - name: Start Minikube --driver=docker
+    - name: Start Minikube 
       run: |
-        minikube start
+        minikube start --driver=docker
 
     - name: Create Secret
       run: |
