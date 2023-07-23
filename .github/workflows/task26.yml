@@ -19,11 +19,11 @@ jobs:
       - name: Create Secret
         run: |
           kubectl create secret generic my-secrets \
-          --from-literal=POSTGRES_USER=$(echo -n "${{ secrets.POSTGRES_USER }}" | base64) \
-          --from-literal=POSTGRES_PASSWORD=$(echo -n "${{ secrets.POSTGRES_PASSWORD }}" | base64) \
+          --from-literal=POSTGRES_USER=$(echo -n "${{ secrets.POSTGRES_USER }}") \
+          --from-literal=POSTGRES_PASSWORD=$(echo -n "${{ secrets.POSTGRES_PASSWORD }}") \
           --from-literal=POSTGRES_DB=$(echo -n "${{ secrets.POSTGRES_DB }}" | base64) \
-          --from-literal=AWS_ACCESS_KEY_ID=$(echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}" | base64) \
-          --from-literal=AWS_SECRET_ACCESS_KEY=$(echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" | base64)
+          --from-literal=AWS_ACCESS_KEY_ID=$(echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}") \
+          --from-literal=AWS_SECRET_ACCESS_KEY=$(echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}")
      
       - name: Deploy Helm Chart
         run: |
