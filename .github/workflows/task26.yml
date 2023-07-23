@@ -18,20 +18,13 @@ jobs:
 
       - name: Create Secret
         run: |
-          cat <<EOF | kubectl apply -f -
-          apiVersion: v1
-          kind: Secret
-          metadata:
-            name: my-secrets
-          type: Opaque
-          data:
-            POSTGRES_USER: $(echo -n "${{ secrets.POSTGRES_USER }}")
-            POSTGRES_PASSWORD: $(echo -n "${{ secrets.POSTGRES_PASSWORD }}")
-            POSTGRES_DB: $(echo -n "${{ secrets.POSTGRES_DB }}" | base64)
-            AWS_ACCESS_KEY_ID: $(echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}")
-            AWS_SECRET_ACCESS_KEY: $(echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}")
-          EOF
-          
+          kubectl create secret generic my-secrets \
+          --from-literal=POSTGRES_USER=$(echo -n "${{ secrets.POSTGRES_USER }}" | base64) \
+          --from-literal=POSTGRES_PASSWORD=$(echo -n "${{ secrets.POSTGRES_PASSWORD }}" | base64) \
+          --from-literal=POSTGRES_DB=$(echo -n "${{ secrets.POSTGRES_DB }}" | base64) \
+          --from-literal=AWS_ACCESS_KEY_ID=$(echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}" | base64) \
+          --from-literal=AWS_SECRET_ACCESS_KEY=$(echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" | base64)
+     
       - name: Deploy Helm Chart
         run: |
           helm install task25 ./task25_helm/task25
