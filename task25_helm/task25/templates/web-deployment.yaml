@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-web
+  labels:
+    app: {{ .Release.Name }}-web
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-web
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-web
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-web
+        image: {{ .Values.image.frontend }}
+        ports:
+        - containerPort: {{ .Values.service.frontend.port }}
+        resources:
+          requests:
+            memory: {{ .Values.resources.request.memory }}
+            cpu: {{ .Values.resources.request.cpu }}
+          limits:
+            memory: {{ .Values.resources.limit.memory }}
+            cpu: {{ .Values.resources.limit.cpu }} 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.frontend.name }}
+spec:
+  type: {{ .Values.service.frontend.type }}
+  selector:
+    app: {{ .Release.Name }}-web
+  ports:
+  - protocol: TCP
+    port: {{ .Values.service.frontend.port }}
+    targetPort: {{ .Values.service.frontend.port }}
+    nodePort: {{ .Values.nodePort.frontend }}
+
+  
