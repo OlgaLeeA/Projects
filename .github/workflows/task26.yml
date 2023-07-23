@@ -24,7 +24,6 @@ jobs:
         --from-literal=POSTGRES_DB=${{ secrets.POSTGRES_DB }} 
         --from-literal=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} 
         --from-literal=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      shell: powershell
 
     - name: Deploy Helm Chart
       run: |
