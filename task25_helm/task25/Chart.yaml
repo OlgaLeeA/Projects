@@ -1,5 +1,4 @@
 apiVersion: v2
 name: task25
-description: A Helm chart for task25 application
-type: application
-appVersion: "1.16.0"
+version: 1.16.0
+description: A Helm chart for deploying my application.
