@@ -1,4 +1,4 @@
-name: Deploye helm
+name: Deploye helm Chart
 
 on:
   push:
