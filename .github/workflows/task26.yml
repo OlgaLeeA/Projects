@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted-MacBook-Pro-Li 
+    runs-on: self-hosted
     steps:
     - name: Checkout
       uses: actions/checkout@v2
