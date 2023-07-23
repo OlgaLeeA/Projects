@@ -1,30 +1,37 @@
-name: Deploye helm Chart fuk
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: 
-    - master 
+    branches:
+      - master
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: self-hosted-MacBook-Pro-Li
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    
-    - name: Start Minikube 
-      run: |
-        minikube start --driver=docker
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Create Secret
-      run: |
-        kubectl create secret generic my-secrets 
-        --from-literal=POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
-        --from-literal=POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
-        --from-literal=POSTGRES_DB=${{ secrets.POSTGRES_DB }} \
-        --from-literal=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-        --from-literal=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Start Minikube 
+        run: |
+          minikube start --driver=docker
 
-    - name: Deploy Helm Chart
-      run: |
-        helm install task25 ./task25_helm/task25
+      - name: Create Secret
+        run: |
+          cat <<EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: my-secrets
+          type: Opaque
+          data:
+            POSTGRES_USER: $(echo -n "${{ secrets.POSTGRES_USER }}")
+            POSTGRES_PASSWORD: $(echo -n "${{ secrets.POSTGRES_PASSWORD }}")
+            POSTGRES_DB: $(echo -n "${{ secrets.POSTGRES_DB }}" | base64)
+            AWS_ACCESS_KEY_ID: $(echo -n "${{ secrets.AWS_ACCESS_KEY_ID }}")
+            AWS_SECRET_ACCESS_KEY: $(echo -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}")
+          EOF
+          
+      - name: Deploy Helm Chart
+        run: |
+          helm install task25 ./task25_helm/task25
