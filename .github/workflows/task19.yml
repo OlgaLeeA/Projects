@@ -2,11 +2,12 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+    - master 
 
 jobs:
   deploy:
-    runs-on: [self-hosted]
+    runs-on: self-hosted-MacBook-Pro-Li 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -17,11 +18,11 @@ jobs:
 
     - name: Create Secret
       run: |
-        kubectl create secret generic my-secrets `
-        --from-literal=POSTGRES_USER=${{ secrets.POSTGRES_USER }} `
-        --from-literal=POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} `
-        --from-literal=POSTGRES_DB=${{ secrets.POSTGRES_DB }} `
-        --from-literal=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} `
+        kubectl create secret generic my-secrets 
+        --from-literal=POSTGRES_USER=${{ secrets.POSTGRES_USER }} 
+        --from-literal=POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} 
+        --from-literal=POSTGRES_DB=${{ secrets.POSTGRES_DB }} 
+        --from-literal=AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} 
         --from-literal=AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
       shell: powershell
 
